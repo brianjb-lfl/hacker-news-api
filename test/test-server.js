@@ -25,26 +25,26 @@ describe('Hacker News API', function () {
   });
   
   beforeEach(function () {
-   return knex.schema.dropTableIfExists('news')
-  .then(() => knex.schema.createTableIfNotExists('news', function (table) {
-    table.increments('id').primary();
-    table.string('title');
-    table.string('url');
-    table.integer('votes', 0)
-  }))
+    return knex.schema.dropTableIfExists('news')
+      .then(() => knex.schema.createTableIfNotExists('news', function (table) {
+        table.increments('id').primary();
+        table.string('title');
+        table.string('url');
+        table.integer('votes', 0)
+      }))
 
-  .then(() => knex('news').insert([{
-    title: 'NYTIMES', 
-    url: "https://www.nytimes.com/", 
-   },
-   {
-    title: 'REDDIT', 
-    url: "https://www.reddit.com/", 
-   },
-   {
-    title: 'YAHOO', 
-    url: "https://www.yahoo.com/", 
-   }]))
+      .then(() => knex('news').insert([{
+        title: 'NYTIMES', 
+        url: "https://www.nytimes.com/", 
+      },
+      {
+        title: 'REDDIT', 
+        url: "https://www.reddit.com/", 
+      },
+      {
+        title: 'YAHOO', 
+        url: "https://www.yahoo.com/", 
+      }]));
   });
 
   // afterEach(function () {
@@ -63,18 +63,18 @@ describe('Hacker News API', function () {
     
     it('should list stories on GET', function() {
       return chai.request(app)
-      .get('/api/stories')
-      .then(function(res){
+        .get('/api/stories')
+        .then(function(res){
           res.should.have.status(200);
           res.should.be.json;
           res.body.should.be.a('array');
           res.body.length.should.equal(3);
           const expectedKeys = ['id', 'title', 'url', 'votes'];
-            res.body.forEach(function(item) {
-              item.should.be.a('object');
-              item.should.include.keys(expectedKeys);
-            })
-      })
-    })
+          res.body.forEach(function(item) {
+            item.should.be.a('object');
+            item.should.include.keys(expectedKeys);
+          });
+        });
+    });
   });
 }); 
